@@ -1,0 +1,40 @@
+@import "custom/var";
+@import "custom/scrollbar";
+@import "custom/bar";
+
+body {
+    background-color: rgb(50, 50, 50);
+
+    a {
+        color: $linkColour;
+    }
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.max-lines-1 {
+    white-space: nowrap;
+    overflow: hidden;
+    display: block;
+    text-overflow: ellipsis;
+}
+
+.row.no-space {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.card-chart hr {
+    border-top-color: rgb(255, 255, 255, 0.25);
+}

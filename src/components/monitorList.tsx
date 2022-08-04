@@ -1,4 +1,4 @@
-import { Component, createSignal, For, onMount, Show } from 'solid-js';
+import { Component, createSignal, For, Match, onMount, Show, Switch } from 'solid-js';
 import { ApiService } from '../services/api/ApiService';
 import { NetworkState } from '../constants/enum/NetworkState';
 import { MonitorStatusHourViewModel, MonitorStatusViewModel } from '../contracts/MonitorStatusViewModel';
@@ -10,7 +10,7 @@ import { formatDate, hoursToEpoch, monitorHourFormat, monitorTickFormat } from '
 export const MonitorList: Component = () => {
     const { isOpen, onOpen, onClose } = createDisclosure();
 
-    const [networkState, setNetworkState] = createSignal<NetworkState>();
+    const [networkState, setNetworkState] = createSignal<NetworkState>(NetworkState.Loading);
     const [monitorRecords, setMonitorRecords] = createSignal<Array<MonitorStatusViewModel>>();
     const [selectedMonitorRecord, setSelectedMonitorRecord] = createSignal<MonitorStatusHourViewModel>(anyObject);
 
@@ -28,6 +28,7 @@ export const MonitorList: Component = () => {
         const apiResult = await apiService.getMonitorRecord(startDate, endDate);
         if (apiResult.isSuccess == false) {
             setNetworkState(NetworkState.Error);
+            return;
         }
 
         setMonitorRecords(apiResult.value);
@@ -39,28 +40,20 @@ export const MonitorList: Component = () => {
         onOpen();
     }
 
-    if (networkState() === NetworkState.Error) {
-        return (
-            <div class="row">
-                <div class="col-12" style={{ 'text-align': 'center' }}>
-                    Error
-                </div>
-            </div>
-        );
-    }
-
-    if (networkState() === NetworkState.Loading) {
-        return (
-            <div class="row">
-                <div class="col-12" style={{ 'text-align': 'center' }}>
-                    Loading
-                </div>
-            </div>
-        );
-    }
-
     return (
-        <div class="row no-space">
+        <div data-networstate={networkState()} class="row no-space">
+            <Switch>
+                <Match when={networkState() === NetworkState.Error}>
+                    <div class="col-12" style={{ 'text-align': 'center' }}>
+                        Error
+                    </div>
+                </Match>
+                <Match when={networkState() === NetworkState.Loading}>
+                    <div class="col-12" style={{ 'text-align': 'center' }}>
+                        <img src="/assets/img/loader.svg" alt="loading" style={{ margin: '0 auto' }} />
+                    </div>
+                </Match>
+            </Switch>
             <For each={monitorRecords()}>
                 {monitor => (
                     <div class="col-12 monitor">

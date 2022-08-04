@@ -87,7 +87,11 @@ export const MonitorList: Component = () => {
                     </ModalHeader>
                     <ModalBody>
                         <Show when={(selectedMonitorRecord()?.ticks ?? []).length < 1}>
-                            <Text textAlign="center" mt="1em">Nothing recorded for this hour</Text>
+                            <Text textAlign="center" mt="1em">
+                                <br />
+                                Nothing recorded for this hour
+                                <br /><br />
+                            </Text>
                         </Show>
                         <Show when={(selectedMonitorRecord()?.ticks ?? []).length > 0}>
                             <Text>Records for this hour:</Text>

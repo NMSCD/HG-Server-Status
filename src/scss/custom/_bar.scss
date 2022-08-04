@@ -16,6 +16,12 @@
             margin-right: 1px;
             border-radius: 2px;
             background-color: red;
+            transition: all 150ms ease-in-out;
+
+            &:hover {
+                margin-top: -1em;
+                height: 3em;
+            }
 
             &.bar-0 {
                 background-color: grey;

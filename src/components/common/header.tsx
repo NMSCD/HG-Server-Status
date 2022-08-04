@@ -17,7 +17,6 @@ export const Header: Component = () => {
                                 </div>
                             </a>
                         </li>
-                        <li class="separator d-lg-none"></li>
                     </ul>
                 </div>
             </div>

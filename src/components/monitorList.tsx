@@ -1,19 +1,18 @@
-import { Component, createSignal, For, onMount } from 'solid-js';
+import { Component, createSignal, For, onMount, Show } from 'solid-js';
 import { ApiService } from '../services/api/ApiService';
 import { NetworkState } from '../constants/enum/NetworkState';
-import { MonitorRecordViewModel } from '../contracts/MonitorRecordViewModel';
-import { MonitorStatusRow } from './monitorStatusRow';
-import { Button, createDisclosure, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@hope-ui/solid';
-import { MonitorRecordPerHour } from '../contracts/data/MonitorRecordPerHour';
+import { MonitorStatusHourViewModel, MonitorStatusViewModel } from '../contracts/MonitorStatusViewModel';
+import { MonitorStatusIcon, MonitorStatusRow } from './monitorStatusRow';
+import { Button, createDisclosure, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text } from '@hope-ui/solid';
 import { anyObject } from '../helper/typescriptHacks';
-import { hoursToEpoch } from '../helper/dateHelper';
+import { formatDate, hoursToEpoch, monitorHourFormat, monitorTickFormat } from '../helper/dateHelper';
 
 export const MonitorList: Component = () => {
     const { isOpen, onOpen, onClose } = createDisclosure();
 
     const [networkState, setNetworkState] = createSignal<NetworkState>();
-    const [monitorRecords, setMonitorRecords] = createSignal<Array<MonitorRecordViewModel>>();
-    const [selectedMonitorRecord, setSelectedMonitorRecord] = createSignal<MonitorRecordPerHour>(anyObject);
+    const [monitorRecords, setMonitorRecords] = createSignal<Array<MonitorStatusViewModel>>();
+    const [selectedMonitorRecord, setSelectedMonitorRecord] = createSignal<MonitorStatusHourViewModel>(anyObject);
 
     onMount(() => {
         fetchData();
@@ -35,9 +34,8 @@ export const MonitorList: Component = () => {
         setNetworkState(NetworkState.Success);
     }
 
-    const setModalContent = (monitorRecordPerHour: MonitorRecordPerHour) => {
+    const setModalContent = (monitorRecordPerHour: MonitorStatusHourViewModel) => {
         setSelectedMonitorRecord(monitorRecordPerHour);
-        console.log({ ...monitorRecordPerHour })
         onOpen();
     }
 
@@ -63,11 +61,13 @@ export const MonitorList: Component = () => {
 
     return (
         <div class="row no-space">
-            <div class="col-12"><br /></div>
             <For each={monitorRecords()}>
                 {monitor => (
                     <div class="col-12 monitor">
-                        <h3>{monitor.name}</h3>
+                        <h3 data-id={monitor.monitorId}>
+                            <MonitorStatusIcon maxStatus={monitor.status} />
+                            {monitor.name}
+                        </h3>
                         <MonitorStatusRow
                             record={monitor}
                             setModalContent={setModalContent}
@@ -81,12 +81,23 @@ export const MonitorList: Component = () => {
                 <ModalOverlay />
                 <ModalContent>
                     <ModalCloseButton />
-                    <ModalHeader>{hoursToEpoch(selectedMonitorRecord().hoursSinceEpochInterval).toISOString()}</ModalHeader>
+                    <ModalHeader>
+                        <MonitorStatusIcon maxStatus={selectedMonitorRecord().maxStatus} />
+                        {monitorHourFormat(hoursToEpoch(selectedMonitorRecord().hourSinceEpochInterval))}
+                    </ModalHeader>
                     <ModalBody>
-                        <h1>hi</h1>
-                        <For each={selectedMonitorRecord().records}>
+                        <Show when={(selectedMonitorRecord()?.ticks ?? []).length < 1}>
+                            <Text textAlign="center" mt="1em">Nothing recorded for this hour</Text>
+                        </Show>
+                        <Show when={(selectedMonitorRecord()?.ticks ?? []).length > 0}>
+                            <Text>Records for this hour:</Text>
+                        </Show>
+                        <For each={selectedMonitorRecord().ticks}>
                             {record => (
-                                <p>{record.dateRecorded}</p>
+                                <p>
+                                    <MonitorStatusIcon maxStatus={record.status} />
+                                    {monitorTickFormat(new Date(record.dateRecorded))}
+                                </p>
                             )}
                         </For>
                     </ModalBody>

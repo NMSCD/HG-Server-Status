@@ -1,54 +1,58 @@
 import { Tooltip } from '@hope-ui/solid';
 import classNames from 'classnames';
 import { Component, For } from 'solid-js';
-import { MonitorRecordPerHour } from '../contracts/data/MonitorRecordPerHour';
-import { MonitorRecordViewModel } from '../contracts/MonitorRecordViewModel';
-import { hoursToEpoch } from '../helper/dateHelper';
+import { MonitorStatusHourViewModel, MonitorStatusViewModel } from '../contracts/MonitorStatusViewModel';
+import { formatDate, hoursToEpoch, monitorHourFormat } from '../helper/dateHelper';
+import { CheckMarkIcon } from './icon/checkmark';
+import { ErrorCrossIcon } from './icon/errorCross';
 
 interface IMonitorStatusRow {
-    record: MonitorRecordViewModel;
-    setModalContent: (monitorRecordPerHour: MonitorRecordPerHour) => void;
+    record: MonitorStatusViewModel;
+    setModalContent: (monitorRecordPerHour: MonitorStatusHourViewModel) => void;
 }
 
 export const MonitorStatusRow: Component<IMonitorStatusRow> = (props: IMonitorStatusRow) => {
 
     const numBars = 168;
-    const arrItems: Array<MonitorRecordPerHour> = new Array(numBars);
+    const utcHoursSinceEpoch = Math.round((new Date()).getTime() / 3600000);
+    const arrItems: Array<MonitorStatusHourViewModel> = new Array(numBars);
     for (let arrIndex = 0; arrIndex < arrItems.length; arrIndex++) {
-        const maxHour = Math.round(props.record.maxMinutesSinceEpochInterval / 60) - arrIndex;
-        const minMinutes = maxHour * 60;
-        const maxMinutes = (maxHour + 1) * 60;
-        const records = props.record.ticks.filter(t => (
-            t.minutesSinceEpochInterval > minMinutes &&
-            t.minutesSinceEpochInterval < maxMinutes
-        ));
+        const hourSinceEpochInterval = utcHoursSinceEpoch - arrIndex;
+        const hourRow = props.record.hours.find(h => h.hourSinceEpochInterval === hourSinceEpochInterval);
 
-        if (records.length > 0) {
-            const perHour: MonitorRecordPerHour = {
-                hoursSinceEpochInterval: maxHour,
-                maxStatus: Math.max(...props.record.ticks.map(t => t.maxStatus)),
-                records,
-            }
+        if (hourRow != null) {
+            const perHour: MonitorStatusHourViewModel = { ...hourRow };
             arrItems[arrIndex] = perHour;
         }
         else {
             arrItems[arrIndex] = {
                 maxStatus: 0,
-                hoursSinceEpochInterval: maxHour,
-                records: [],
+                hourSinceEpochInterval: hourSinceEpochInterval,
+                dateRecorded: hoursToEpoch(hourSinceEpochInterval),
+                ticks: [],
             };
         }
     }
     const reversed = arrItems.reverse();
 
+    // If latest value is unknown, use the previous hour's value
+    if (reversed[reversed.length - 1].maxStatus === 0) {
+        reversed[reversed.length - 1].maxStatus = reversed[reversed.length - 2].maxStatus;
+    }
+
     return (
         <div class="status-row">
             <For each={reversed}>
-                {tick => (
-                    <Tooltip label={hoursToEpoch(tick.hoursSinceEpochInterval).toISOString()}>
+                {hour => (
+                    <Tooltip label={
+                        <>
+                            <MonitorStatusIcon maxStatus={hour.maxStatus} />
+                            {monitorHourFormat(hoursToEpoch(hour.hourSinceEpochInterval))}
+                        </>
+                    }>
                         <div
-                            class={classNames('bar', 'bar-' + tick.maxStatus)}
-                            onClick={() => props.setModalContent(tick)}>
+                            class={classNames('bar', 'bar-' + hour.maxStatus)}
+                            onClick={() => props.setModalContent(hour)}>
                         </div>
                     </Tooltip>
                 )}
@@ -56,3 +60,11 @@ export const MonitorStatusRow: Component<IMonitorStatusRow> = (props: IMonitorSt
         </div>
     );
 };
+
+interface IMonitorStatusIcon {
+    maxStatus: number;
+}
+export const MonitorStatusIcon: Component<IMonitorStatusIcon> = (props: IMonitorStatusIcon) => {
+    if (props.maxStatus == 2) return (<CheckMarkIcon />);
+    return (<ErrorCrossIcon />);
+}

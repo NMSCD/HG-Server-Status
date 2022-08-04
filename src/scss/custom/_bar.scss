@@ -15,7 +15,11 @@
             margin-left: 1px;
             margin-right: 1px;
             border-radius: 2px;
-            background-color: grey;
+            background-color: red;
+
+            &.bar-0 {
+                background-color: grey;
+            }
 
             &.bar-2 {
                 background-color: green;

@@ -1,4 +1,6 @@
 import type { Component } from 'solid-js';
+import { site } from '../../constants/site';
+import { formatDate } from '../../helper/dateHelper';
 
 export const Footer: Component = () => {
     return (
@@ -6,27 +8,18 @@ export const Footer: Component = () => {
             <div class="container-fluid">
                 <ul class="nav">
                     <li class="nav-item">
-                        <a href="javascript:void(0)" class="nav-link">
-                            Creative Tim
-                        </a>
+                        <a href={site.nmscd.website} class="nav-link">NMSCD</a>
                     </li>
                     <li class="nav-item">
-                        <a href="javascript:void(0)" class="nav-link">
-                            About Us
-                        </a>
+                        <a href={site.nmscd.github} class="nav-link">Github Org</a>
                     </li>
                     <li class="nav-item">
-                        <a href="javascript:void(0)" class="nav-link">
-                            Blog
-                        </a>
+                        <a href={site.github} class="nav-link">Source code</a>
                     </li>
                 </ul>
                 <div class="copyright">
-                    ©
-                    <script>
-                        document.write(new Date().getFullYear())
-                    </script>20222018 made with <i class="tim-icons icon-heart-2"></i> by
-                    <a href="javascript:void(0)" target="_blank">Creative Tim</a> for a better web.
+                    <span>© <b>NMSCD-Status</b> made with 💖 by&nbsp;</span>
+                    <a href={site.assistantNMS.website} target="_blank">AssistantNMS</a> for the NMS community.
                 </div>
             </div>
         </footer>

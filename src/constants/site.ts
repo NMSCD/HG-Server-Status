@@ -1,6 +1,7 @@
 export const site = {
     ref: 'nmscdStatus',
     url: 'http://status.nmscd.com/',
+    github: 'https://github.com/NMSCD/HG-Server-Status',
     kurt: {
         fullName: 'Kurt Lourens',
         nickName: 'Khaoz-Topsy',

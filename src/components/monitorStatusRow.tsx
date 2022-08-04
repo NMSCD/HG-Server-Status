@@ -5,6 +5,7 @@ import { MonitorStatusHourViewModel, MonitorStatusViewModel } from '../contracts
 import { formatDate, hoursToEpoch, monitorHourFormat } from '../helper/dateHelper';
 import { CheckMarkIcon } from './icon/checkmark';
 import { ErrorCrossIcon } from './icon/errorCross';
+import { QuestionMarkIcon } from './icon/questionMark';
 
 interface IMonitorStatusRow {
     record: MonitorStatusViewModel;
@@ -58,7 +59,6 @@ export const MonitorStatusRow: Component<IMonitorStatusRow> = (props: IMonitorSt
         return reversed;
     }
 
-
     return (
         <div class="status-row" data-num-bars={numBars()}>
             <For each={getHourArr(numBars())}>
@@ -89,6 +89,7 @@ interface IMonitorStatusIcon {
     maxStatus: number;
 }
 export const MonitorStatusIcon: Component<IMonitorStatusIcon> = (props: IMonitorStatusIcon) => {
-    if (props.maxStatus == 2) return (<CheckMarkIcon />);
+    if (props.maxStatus === 0) return (<QuestionMarkIcon />);
+    if (props.maxStatus === 2) return (<CheckMarkIcon />);
     return (<ErrorCrossIcon />);
 }

@@ -1712,9 +1712,10 @@ mark,
 }
 
 .navbar-collapse {
-    flex-basis: 100%;
+    flex-basis: auto;
     flex-grow: 1;
     align-items: center;
+    display: flex !important;
 }
 
 .navbar-toggler {

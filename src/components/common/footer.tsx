@@ -1,5 +1,6 @@
 import type { Component } from 'solid-js';
 import { site } from '../../constants/site';
+import packageJson from '../../../package.json';
 
 export const Footer: Component = () => {
     return (
@@ -13,7 +14,7 @@ export const Footer: Component = () => {
                         <a href={site.nmscd.github} class="nav-link">Github Org</a>
                     </li>
                     <li class="nav-item">
-                        <a href={site.github} class="nav-link">Source code</a>
+                        <a href={site.github} class="nav-link">Source code ({packageJson.version})</a>
                     </li>
                 </ul>
                 <div class="copyright">

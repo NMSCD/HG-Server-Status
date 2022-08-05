@@ -40,6 +40,18 @@ export const MonitorList: Component = () => {
         onOpen();
     }
 
+    const getAvailablity = (monitor: MonitorStatusViewModel): string => {
+        const allTicks = monitor.hours
+            .flatMap(h => h.ticks)
+            .map(t => t.status)
+            .filter(status => status != 0);
+
+        const numSuccess = allTicks.filter(t => t == 2).length;
+        const failedPerc = numSuccess / allTicks.length;
+
+        return `${Math.round(failedPerc * 100)}%`;
+    }
+
     return (
         <div data-networstate={networkState()} class="row no-space">
             <Switch>
@@ -60,7 +72,8 @@ export const MonitorList: Component = () => {
                     <div class="col-12 monitor">
                         <h3 data-id={monitor.monitorId}>
                             <MonitorStatusIcon maxStatus={monitor.status} />
-                            {monitor.name}
+                            &nbsp;{monitor.name}
+                            <small>Availablity: {getAvailablity(monitor)}</small>
                         </h3>
                         <MonitorStatusRow
                             record={monitor}

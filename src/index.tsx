@@ -4,7 +4,6 @@ import { StatusApp } from './statusApp';
 import { CustomThemeProvider } from './themeProvider';
 
 import './scss/custom.scss';
-import './scss/black-dashboard.scss';
 
 render(() =>
     <CustomThemeProvider>

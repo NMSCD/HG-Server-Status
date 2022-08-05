@@ -1,6 +1,5 @@
 import type { Component } from 'solid-js';
 import { site } from '../../constants/site';
-import { formatDate } from '../../helper/dateHelper';
 
 export const Footer: Component = () => {
     return (
@@ -19,7 +18,7 @@ export const Footer: Component = () => {
                 </ul>
                 <div class="copyright">
                     <span>© <b>NMSCD-Status</b> made with 💖 by&nbsp;</span>
-                    <a href={site.assistantNMS.website} target="_blank">AssistantNMS</a> for the NMS community.
+                    <a href={site.assistantNMS.website} target="_blank">AssistantNMS</a> for the NMSCD.
                 </div>
             </div>
         </footer>

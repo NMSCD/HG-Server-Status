@@ -1,0 +1,38 @@
+{
+    "name": "HG Status by NMSCD! View the uptime of HG servers",
+    "short_name": "HG Status",
+    "description": "View the uptime of HG servers and get detailed insights into how the No Man&#x27;s Sky infrastructure is functioning!",
+    "lang": "en-US",
+    "scope": "/",
+    "start_url": "/?standalone",
+    "display": "standalone",
+    "icons": [
+        {
+            "src": "assets/favicon/android-chrome-256x256.png",
+            "sizes": "256x256",
+            "type": "image/png"
+        },
+        {
+            "src": "assets/favicon/android-chrome-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "assets/favicon/apple-touch-icon-144x144.png",
+            "sizes": "144x144",
+            "type": "image/png"
+        },
+        {
+            "src": "assets/favicon/favicon-96x96.png",
+            "sizes": "96x96",
+            "type": "image/png"
+        },
+        {
+            "src": "assets/favicon/apple-touch-icon-76x76.png",
+            "sizes": "76x76",
+            "type": "image/png"
+        }
+    ],
+    "background_color": "#1b1f22",
+    "theme_color": "#7986cb"
+}

@@ -1,0 +1,4 @@
+Sitemap: https://status.nmscd.com/sitemap.xml
+User-agent: *
+Disallow: /cgi-bin/
+Disallow: /docs/

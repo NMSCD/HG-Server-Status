@@ -1,0 +1,21 @@
+<OpenSearchDescription
+  xmlns="http://a9.com/-/spec/opensearch/1.1/"
+  xmlns:moz="http://www.mozilla.org/2006/browser/search/"
+>
+  <ShortName>HG Status</ShortName>
+  <Description
+  >View the uptime of HG servers and get detailed insights into how the No Man&#x27;s Sky infrastructure is functioning!</Description>
+  <InputEncoding>UTF-8</InputEncoding>
+  <Image
+    width="16"
+    height="16"
+    type="image/x-icon"
+  >https://status.nmscd.com//favicon.ico</Image>
+  <Url type="text/html" template="https://status.nmscd.com/?q={searchTerms}">
+    <Param name="searchTerms" value="{searchTerms}" />
+  </Url>
+  <Url
+    type="application/x-suggestions+json"
+    template="https://status.nmscd.com/?q={searchTerms}"
+  />
+</OpenSearchDescription>

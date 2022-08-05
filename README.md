@@ -1,34 +1,29 @@
-## Usage
+<div align="center">
 
-Those templates dependencies are maintained via [pnpm](https://pnpm.io) via `pnpm up -Lri`.
+# 📈 HG server Status
 
-This is the reason you see a `pnpm-lock.yaml`. That being said, any package manager will work. This file can be safely be removed once you clone a template.
+This site allows you to see the status of the servers that the **NMSCD** and the **NMS API reverse engineering** are tracking. This project does not add any additional pings per minute to the HG infrastructure, it merely uses the already gathered information that the [AssistantNMS](https://nmsassistant.com) servers have already gathered while keeping the endpoints that are checked _secret_.
 
-```bash
-$ npm install # or pnpm install or yarn install
-```
+  [![Supported by the No Man's Sky Community Developers & Designers](https://raw.githubusercontent.com/NMSCD/About/master/badge/purple-ftb.svg)][nmscd] <br />
+  ![madeWithLove](./.github/badges/built-with-love.svg)
 
-### Learn more on the [Solid Website](https://solidjs.com) and come chat with us on our [Discord](https://discord.com/invite/solidjs)
+  <br /> 
+</div>
 
-## Available Scripts
+## Building the project locally
 
-In the project directory, you can run:
+The main logic of this solution uses SolidJS and SCSS for styling. To get the solution running, use the following commands:
 
-### `npm dev` or `npm start`
+- `npm i`
+- `npm run dev`
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.<br>
-
-### `npm run build`
-
-Builds the app for production to the `dist` folder.<br>
-It correctly bundles Solid in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+<br />
 
 ## Deployment
 
-You can deploy the `dist` folder to any static host provider (netlify, surge, now, etc.)
+This site makes use of Github Actions to build the project and Github Pages to host it 💪
+
+
+<!-- Links used in the page -->
+
+[nmscd]: https://github.com/NMSCD?ref=nmscdStatus

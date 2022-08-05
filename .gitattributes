@@ -1,3 +1,3 @@
 src/scss/black-dashboard.scss -linguist-detectable
-src/scss/black-dashboard/* -linguist-detectable
+src/scss/black-dashboard/** -linguist-detectable
 public/assets/css/black-dashboard.css -linguist-detectable

@@ -45,7 +45,7 @@ export const MonitorList: Component = () => {
             <Switch>
                 <Match when={networkState() === NetworkState.Error}>
                     <div class="col-12" style={{ 'text-align': 'center' }}>
-                        <img src="/assets/img/loader.svg" alt="loading" style={{ margin: '0 auto' }} />
+                        <img src="/assets/img/error.png" alt="loading" style={{ margin: '0 auto' }} />
                         <p>Oops! Something went wrong</p>
                     </div>
                 </Match>

@@ -1,7 +1,9 @@
 import { Tooltip } from '@hope-ui/solid';
 import classNames from 'classnames';
-import { Component, createEffect, createSignal, For } from 'solid-js';
-import { MonitorStatusHourViewModel, MonitorStatusViewModel } from '../contracts/MonitorStatusViewModel';
+import { Component, createEffect, createSignal, For, JSX } from 'solid-js';
+import { statusColours } from '../constants/colour';
+import { MonitorStatusHourViewModel, MonitorStatusTickViewModel, MonitorStatusViewModel } from '../contracts/MonitorStatusViewModel';
+import { approximateColor1ToColor2ByPercent } from '../helper/colourHelper';
 import { formatDate, hoursToEpoch, monitorHourFormat } from '../helper/dateHelper';
 import { CheckMarkIcon } from './icon/checkmark';
 import { ErrorCrossIcon } from './icon/errorCross';
@@ -59,6 +61,22 @@ export const MonitorStatusRow: Component<IMonitorStatusRow> = (props: IMonitorSt
         return reversed;
     }
 
+    const getOverrideStyleBasedOnMinuteStatuses = (hour: MonitorStatusHourViewModel): JSX.CSSProperties => {
+        const numTicks = hour.ticks?.length ?? 0;
+        if (numTicks < 1) return {};
+
+        const tickAvgStatus = hour.ticks.reduce((total: number, next: MonitorStatusTickViewModel) =>
+            total + next.status, 0) / numTicks;
+        if (hour.maxStatus == tickAvgStatus) return {};
+
+        const numFailed = hour.ticks.map(t => t.status).filter(t => t != 2).length;
+        const failedPerc = numFailed / numTicks;
+
+        return {
+            'background-color': approximateColor1ToColor2ByPercent(statusColours.success, statusColours.error, failedPerc),
+        }
+    }
+
     return (
         <div class="status-row" data-num-bars={numBars()}>
             <For each={getHourArr(numBars())}>
@@ -75,6 +93,7 @@ export const MonitorStatusRow: Component<IMonitorStatusRow> = (props: IMonitorSt
                         }>
                         <div
                             class={classNames('bar', 'bar-' + hour.maxStatus)}
+                            style={getOverrideStyleBasedOnMinuteStatuses(hour)}
                             onClick={() => props.setModalContent(hour)}>
                         </div>
                     </Tooltip>

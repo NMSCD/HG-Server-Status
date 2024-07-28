@@ -83,28 +83,30 @@ export const MonitorDetailModal: Component<ISelectedMonitorTickProps> = (
               />
             </div>
           </Match>
-        </Switch>
-        <Show when={(monitorTickRecords() ?? []).length < 1}>
-          <Text textAlign="center" mt="1em">
-            <br />
-            Nothing recorded for this hour
-            <br />
-            <br />
-          </Text>
-        </Show>
-        <Show when={(monitorTickRecords() ?? []).length > 0}>
-          <Text>Records for this hour:</Text>
-        </Show>
-        <For each={monitorTickRecords()}>
-          {(record) => (
-            <p>
-              <MonitorStatusIcon maxStatus={getMaxStatus(record)} />
-              {monitorTickFormat(
-                minutesToEpoch(record.minutesSinceEpochInterval)
+          <Match when={networkState() === NetworkState.Success}>
+            <Show when={(monitorTickRecords() ?? []).length < 1}>
+              <Text textAlign="center" mt="1em">
+                <br />
+                Nothing recorded for this hour
+                <br />
+                <br />
+              </Text>
+            </Show>
+            <Show when={(monitorTickRecords() ?? []).length > 0}>
+              <Text>Records for this hour:</Text>
+            </Show>
+            <For each={monitorTickRecords()}>
+              {(record) => (
+                <p>
+                  <MonitorStatusIcon maxStatus={getMaxStatus(record)} />
+                  {monitorTickFormat(
+                    minutesToEpoch(record.minutesSinceEpochInterval)
+                  )}
+                </p>
               )}
-            </p>
-          )}
-        </For>
+            </For>
+          </Match>
+        </Switch>
       </ModalBody>
     </>
   );

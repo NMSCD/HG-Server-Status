@@ -1,21 +1,22 @@
 export interface MonitorStatusViewModel {
-    monitorId: number;
-    name: string;
-    status: number;
-    hours: Array<MonitorStatusHourViewModel>;
-    minHoursSinceEpochInterval: number;
-    maxHoursSinceEpochInterval: number;
+  monitorId: number;
+  name: string;
+  url: string;
+  status: number;
+  hours: Array<MonitorStatusHourViewModel>;
+  minHoursSinceEpochInterval: number;
+  maxHoursSinceEpochInterval: number;
 }
 
 export interface MonitorStatusHourViewModel {
-    maxStatus: number;
-    hourSinceEpochInterval: number;
-    dateRecorded: Date;
-    ticks: Array<MonitorStatusTickViewModel>;
+  maxStatus: number;
+  numStatuses: number;
+  numSuccessStatuses: number;
+  hourSinceEpochInterval: number;
 }
 
 export interface MonitorStatusTickViewModel {
-    status: number;
-    minutesSinceEpochInterval: number;
-    dateRecorded: string;
+  numStatuses: number;
+  numSuccessStatuses: number;
+  minutesSinceEpochInterval: number;
 }

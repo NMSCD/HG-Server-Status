@@ -38,7 +38,7 @@ export const MonitorStatusRow: Component<IMonitorStatusRow> = (
   const getHourArr = (
     numBarsInt: number
   ): Array<MonitorStatusHourViewModel> => {
-    const utcHoursSinceEpoch = Math.round(new Date().getTime() / 3600000);
+    const utcHoursSinceEpoch = Math.floor(new Date().getTime() / 3600000);
     const arrItems: Array<MonitorStatusHourViewModel> = new Array(numBarsInt);
     for (let arrIndex = 0; arrIndex < arrItems.length; arrIndex++) {
       const hourSinceEpochInterval = utcHoursSinceEpoch - arrIndex;

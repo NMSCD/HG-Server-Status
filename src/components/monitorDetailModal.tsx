@@ -20,7 +20,7 @@ import { ApiService } from "../services/api/ApiService";
 import { MonitorStatusIcon } from "./monitorStatusRow";
 
 export interface ISelectedMonitorTickProps {
-  maxStatus: number;
+  percentage: number;
   monitorId: number;
   hour: number;
 }
@@ -51,15 +51,15 @@ export const MonitorDetailModal: Component<ISelectedMonitorTickProps> = (
     setNetworkState(NetworkState.Success);
   };
 
-  const getMaxStatus = (record: MonitorStatusTickViewModel) => {
+  const getPercentage = (record: MonitorStatusTickViewModel) => {
     const successPerc = record.numSuccessStatuses / record.numStatuses;
-    return successPerc == 1 ? 2 : 9;
+    return successPerc * 100;
   };
 
   return (
     <>
       <ModalHeader>
-        <MonitorStatusIcon maxStatus={props.maxStatus} />
+        <MonitorStatusIcon percentage={props.percentage} />
         {monitorHourFormat(hoursToEpoch(props.hour))}
       </ModalHeader>
       <ModalBody>
@@ -98,7 +98,7 @@ export const MonitorDetailModal: Component<ISelectedMonitorTickProps> = (
             <For each={monitorTickRecords()}>
               {(record) => (
                 <p>
-                  <MonitorStatusIcon maxStatus={getMaxStatus(record)} />
+                  <MonitorStatusIcon percentage={getPercentage(record)} />
                   {monitorTickFormat(
                     minutesToEpoch(record.minutesSinceEpochInterval)
                   )}

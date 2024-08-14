@@ -1,42 +1,25 @@
 import {
-  Component,
-  createSignal,
-  For,
-  Match,
-  onMount,
-  Show,
-  Switch,
-} from "solid-js";
-import { ApiService } from "../services/api/ApiService";
+  Button,
+  createDisclosure,
+  Modal,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalOverlay,
+} from "@hope-ui/solid";
+import { Component, createSignal, For, Match, onMount, Switch } from "solid-js";
 import { NetworkState } from "../constants/enum/NetworkState";
 import {
   MonitorStatusHourViewModel,
   MonitorStatusViewModel,
 } from "../contracts/MonitorStatusViewModel";
-import { MonitorStatusIcon, MonitorStatusRow } from "./monitorStatusRow";
-import {
-  Button,
-  createDisclosure,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  Text,
-} from "@hope-ui/solid";
 import { anyObject } from "../helper/typescriptHacks";
-import {
-  formatDate,
-  hoursToEpoch,
-  monitorHourFormat,
-  monitorTickFormat,
-} from "../helper/dateHelper";
+import { ApiService } from "../services/api/ApiService";
 import {
   ISelectedMonitorTickProps,
   MonitorDetailModal,
 } from "./monitorDetailModal";
+import { MonitorStatusIcon, MonitorStatusRow } from "./monitorStatusRow";
 
 export const MonitorList: Component = () => {
   const { isOpen, onOpen, onClose } = createDisclosure();
@@ -75,13 +58,16 @@ export const MonitorList: Component = () => {
     (monitorRecordPerHour: MonitorStatusHourViewModel) => {
       setSelectedMonitorTickRecord({
         monitorId,
-        maxStatus: monitorRecordPerHour.maxStatus,
+        percentage:
+          (monitorRecordPerHour.numSuccessStatuses /
+            monitorRecordPerHour.numStatuses) *
+          100,
         hour: monitorRecordPerHour.hourSinceEpochInterval,
       });
       onOpen();
     };
 
-  const getAvailability = (monitor: MonitorStatusViewModel): string => {
+  const getPercentage = (monitor: MonitorStatusViewModel) => {
     const totalStatuses = monitor.hours.reduce(
       (partial, cur) => partial + cur.numStatuses,
       0
@@ -91,9 +77,7 @@ export const MonitorList: Component = () => {
       0
     );
 
-    const successPerc = totalSuccessStatuses / totalStatuses;
-
-    return `${Math.round(successPerc * 100)}%`;
+    return (totalSuccessStatuses / totalStatuses) * 100;
   };
 
   return (
@@ -126,9 +110,9 @@ export const MonitorList: Component = () => {
         {(monitor) => (
           <div class="col-12 monitor">
             <h3 data-id={monitor.monitorId}>
-              <MonitorStatusIcon maxStatus={monitor.status} />
+              <MonitorStatusIcon percentage={getPercentage(monitor)} />
               &nbsp;{monitor.name}
-              <small>Availablity: {getAvailability(monitor)}</small>
+              <small>Availablity: {Math.round(getPercentage(monitor))}%</small>
             </h3>
             <MonitorStatusRow
               record={monitor}
@@ -145,7 +129,7 @@ export const MonitorList: Component = () => {
           <ModalCloseButton />
           <MonitorDetailModal
             monitorId={selectedMonitorTickRecord().monitorId}
-            maxStatus={selectedMonitorTickRecord().maxStatus}
+            percentage={selectedMonitorTickRecord().percentage}
             hour={selectedMonitorTickRecord().hour}
           />
           <ModalFooter>

@@ -9,7 +9,6 @@ export interface MonitorStatusViewModel {
 }
 
 export interface MonitorStatusHourViewModel {
-  maxStatus: number;
   numStatuses: number;
   numSuccessStatuses: number;
   hourSinceEpochInterval: number;

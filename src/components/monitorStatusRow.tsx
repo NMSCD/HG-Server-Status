@@ -51,7 +51,6 @@ export const MonitorStatusRow: Component<IMonitorStatusRow> = (
         arrItems[arrIndex] = perHour;
       } else {
         arrItems[arrIndex] = {
-          maxStatus: 0,
           numStatuses: 0,
           numSuccessStatuses: 0,
           hourSinceEpochInterval: hourSinceEpochInterval,
@@ -59,13 +58,6 @@ export const MonitorStatusRow: Component<IMonitorStatusRow> = (
       }
     }
     const reversed = arrItems.reverse();
-
-    // If latest value is unknown, use the previous hour's value
-    if (reversed[reversed.length - 1].maxStatus === 0) {
-      reversed[reversed.length - 1].maxStatus =
-        reversed[reversed.length - 2].maxStatus;
-    }
-
     return reversed;
   };
 
@@ -84,6 +76,11 @@ export const MonitorStatusRow: Component<IMonitorStatusRow> = (
     };
   };
 
+  const getPercentage = (hour: MonitorStatusHourViewModel) => {
+    const successPerc = hour.numSuccessStatuses / hour.numStatuses;
+    return successPerc * 100;
+  };
+
   return (
     <div class="status-row" data-num-bars={numBars()}>
       <For each={getHourArr(numBars())}>
@@ -94,13 +91,13 @@ export const MonitorStatusRow: Component<IMonitorStatusRow> = (
             mt="0.5em"
             label={
               <>
-                <MonitorStatusIcon maxStatus={hour.maxStatus} />
+                <MonitorStatusIcon percentage={getPercentage(hour)} />
                 {monitorHourFormat(hoursToEpoch(hour.hourSinceEpochInterval))}
               </>
             }
           >
             <div
-              class={classNames("bar", "bar-" + hour.maxStatus)}
+              class={classNames("bar", "bar-" + 0)}
               style={getOverrideStyleBasedOnMinuteStatuses(hour)}
               onClick={() => props.setModalContent(hour)}
             ></div>
@@ -112,12 +109,13 @@ export const MonitorStatusRow: Component<IMonitorStatusRow> = (
 };
 
 interface IMonitorStatusIcon {
-  maxStatus: number;
+  percentage: number;
 }
 export const MonitorStatusIcon: Component<IMonitorStatusIcon> = (
   props: IMonitorStatusIcon
 ) => {
-  if (props.maxStatus === 0) return <QuestionMarkIcon />;
-  if (props.maxStatus === 2) return <CheckMarkIcon />;
+  if (props.percentage === 100) return <CheckMarkIcon />;
+  if (props.percentage < 100 && props.percentage > 33)
+    return <QuestionMarkIcon />;
   return <ErrorCrossIcon />;
 };
